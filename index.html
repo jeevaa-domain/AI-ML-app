@@ -1,0 +1,3556 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ALPHA AI&ML HIFI NOTEBOOK</title>
+<script src="https://unpkg.com/lucide@latest"></script>
+<style>
+:root {
+  --primary-red: #DC2626;
+  --secondary-orange: #EA580C;
+  --fire-dark: #7F1D1D;
+  --fire-light: #FEF3C7;
+  --white: #FFFFFF;
+  --gold: #F59E0B;
+  --orange: #EA580C;
+  --bg-color: #FEF3C7;
+  --text-color: #7F1D1D;
+  --card-bg: rgba(255,255,255,0.9);
+  --accent: #DC2626;
+  --accent-hover: #B91C1C;
+  --shadow: rgba(220, 38, 38, 0.2);
+  --gradient: linear-gradient(135deg, #DC2626, #EA580C);
+  --fire-glow: 0 0 20px rgba(220, 38, 38, 0.4);
+}
+
+body.dark {
+  --bg-color: #1C1917;
+  --text-color: #FEF3C7;
+  --card-bg: rgba(63, 25, 25, 0.8);
+  --accent: #EA580C;
+  --shadow: rgba(220, 38, 38, 0.3);
+  --gradient: linear-gradient(135deg, #7F1D1D, #EA580C);
+  --fire-glow: 0 0 25px rgba(234, 88, 12, 0.5);
+}
+
+/* ======================= FIRE ANIMATIONS ======================= */
+@keyframes flameFlicker {
+  0%, 100% { opacity: 0.9; transform: scale(1); }
+  25% { opacity: 1; transform: scale(1.02); }
+  50% { opacity: 0.8; transform: scale(0.98); }
+  75% { opacity: 1; transform: scale(1.01); }
+}
+
+@keyframes fireGlow {
+  0%, 100% { box-shadow: var(--fire-glow); }
+  50% { box-shadow: 0 0 30px rgba(234, 88, 12, 0.6); }
+}
+
+@keyframes emberFloat {
+  0% { transform: translateY(0) rotate(0deg); opacity: 0; }
+  50% { opacity: 1; }
+  100% { transform: translateY(-100px) rotate(180deg); opacity: 0; }
+}
+
+@keyframes heatWave {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.fire-animated {
+  animation: flameFlicker 2s ease-in-out infinite, fireGlow 3s ease-in-out infinite;
+}
+
+.heat-wave {
+  background: linear-gradient(90deg, #DC2626, #EA580C, #F59E0B, #EA580C, #DC2626);
+  background-size: 200% 200%;
+  animation: heatWave 4s ease infinite;
+}
+
+.ember {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: #F59E0B;
+  border-radius: 50%;
+  animation: emberFloat 3s ease-in-out infinite;
+}
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  transition: background-color 0.4s, color 0.4s;
+  overflow-x: hidden;
+  padding-bottom: env(safe-area-inset-bottom);
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* ======================= SPLASH SCREEN ======================= */
+#splash {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  background: var(--gradient);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  text-align: center;
+  z-index: 9999;
+  overflow: hidden;
+  animation: fadeOut 1.3s ease forwards, heatWave 8s ease infinite;
+  animation-delay: 2.5s;
+  transition: all 0.4s ease;
+}
+
+#splash-logo {
+  font-size: clamp(1.8rem, 5vw, 2.5rem);
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  animation: popIn 1.3s ease;
+  margin-bottom: 20px;
+}
+
+.splash-image {
+  width: 120px;
+  height: 120px;
+  border-radius: 20px;
+  margin-bottom: 20px;
+  animation: fadeIn 1.4s ease 0.6s forwards;
+  opacity: 0;
+}
+
+#splash-subtitle {
+  font-size: clamp(0.8rem, 3vw, 1rem);
+  opacity: 0.8;
+  margin-top: 8px;
+  letter-spacing: 0.5px;
+  animation: fadeIn 1.4s ease 0.6s forwards;
+  opacity: 0;
+}
+
+@keyframes popIn {
+  0% { transform: scale(0.7); opacity: 0; }
+  60% { transform: scale(1.1); opacity: 1; }
+  100% { transform: scale(1); }
+}
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeOut {
+  0% { opacity: 1; }
+  100% { opacity: 0; visibility: hidden; }
+}
+
+/* ======================= LOGIN PAGE ======================= */
+#loginPage {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  background: var(--gradient);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 9998;
+  padding: 20px;
+  transition: all 0.5s ease;
+}
+
+.login-container {
+  background: var(--card-bg);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  padding: 30px;
+  width: 100%;
+  max-width: 400px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.login-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 5px;
+  background: linear-gradient(90deg, var(--gold), var(--orange));
+}
+
+.login-logo {
+  width: 80px;
+  height: 80px;
+  border-radius: 15px;
+  margin: 0 auto 20px;
+  display: block;
+}
+
+.login-title {
+  color: var(--primary-blue);
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.login-subtitle {
+  color: var(--text-color);
+  opacity: 0.8;
+  margin-bottom: 30px;
+  font-size: 0.9rem;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.form-group {
+  text-align: left;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: var(--primary-blue);
+  font-size: 0.9rem;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 12px 15px;
+  border-radius: 10px;
+  border: 1px solid #cbd5e1;
+  background: var(--bg-color);
+  color: var(--text-color);
+  font-size: 1rem;
+  box-sizing: border-box;
+  transition: all 0.3s ease;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: var(--primary-blue);
+  box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.1);
+}
+
+.login-button {
+  background: var(--gradient);
+  color: white;
+  border: none;
+  padding: 14px;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.login-button:hover {
+  transform: translateY(-2px);
+  animation: fireGlow 1.5s ease-in-out infinite;
+  box-shadow: var(--fire-glow); 
+}
+
+.login-footer {
+  margin-top: 20px;
+  font-size: 0.8rem;
+  color: var(--text-color);
+  opacity: 0.7;
+}
+
+/* Header with integrated news */
+header {
+  position: sticky;
+  top: 0;
+  background: var(--gradient);
+  color: white;
+  padding: 0;
+  font-size: 1.3em;
+  font-weight: 600;
+  border-bottom-left-radius: 20px;
+  border-bottom-right-radius: 20px;
+  box-shadow: var(--fire-glow);
+  backdrop-filter: blur(10px);
+  transform: translateY(-100%);
+  animation: slideDown 1.2s ease forwards 2.4s, flameFlicker 3s ease-in-out infinite 3s;
+  z-index: 100;
+  overflow: hidden;
+}
+@keyframes slideDown { to { transform: translateY(0); } }
+
+.header-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 12px 16px;
+  position: relative;
+}
+
+.header-title {
+  text-align: center;
+  flex: 1;
+  font-size: 1.2rem;
+}
+
+/* Simplified Menu Toggle */
+.menu-toggle {
+  position: absolute;
+  left: 16px;
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  padding: 8px;
+  transition: 0.3s;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.menu-toggle:hover { opacity: 0.8; }
+
+.dark-mode-toggle {
+  position: absolute;
+  right: 16px;
+  background: rgba(255,255,255,0.2);
+  border: none;
+  border-radius: 50%;
+  color: white;
+  cursor: pointer;
+  padding: 6px;
+  backdrop-filter: blur(10px);
+  transition: 0.3s;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.dark-mode-toggle:hover { transform: rotate(20deg); }
+
+/* Integrated News Ticker */
+.news-ticker {
+  background: rgba(0, 0, 0, 0.15);
+  padding: 6px 16px;
+  overflow: hidden;
+  font-size: 0.75rem;
+  font-weight: 500;
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.news-icon {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.news-ticker-content {
+  display: inline-block;
+  white-space: nowrap;
+  animation: ticker 25s linear infinite;
+}
+
+.news-ticker-content span {
+  margin-right: 30px;
+}
+
+@keyframes ticker {
+  0% { transform: translateX(100%); }
+  100% { transform: translateX(-100%); }
+}
+
+/* Slide Menu */
+.slide-menu {
+  position: fixed;
+  top: 0;
+  left: -280px;
+  width: 280px;
+  height: 100%;
+  background: var(--card-bg);
+  backdrop-filter: blur(15px);
+  box-shadow: 2px 0 15px var(--shadow);
+  z-index: 200;
+  transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  overflow-y: auto;
+  padding: 20px 0;
+}
+
+.slide-menu.active {
+  transform: translateX(280px);
+}
+
+.menu-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 199;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+}
+
+.menu-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.menu-header {
+  padding: 20px;
+  border-bottom: 1px solid rgba(0,0,0,0.1);
+  margin-bottom: 15px;
+}
+
+.menu-header h3 {
+  margin: 0;
+  color: var(--accent);
+  font-size: 1.2rem;
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  padding: 15px 20px;
+  color: var(--text-color);
+  text-decoration: none;
+  transition: all 0.3s ease;
+  border-left: 4px solid transparent;
+}
+
+.menu-item:hover {
+  background: rgba(30, 58, 138, 0.1);
+  border-left-color: var(--accent);
+  transform: translateX(5px);
+}
+
+.menu-item i {
+  margin-right: 12px;
+  width: 20px;
+  text-align: center;
+}
+
+.content {
+  padding: 16px;
+  padding-bottom: 80px;
+  opacity: 0;
+  transform: translateY(30px);
+  animation: fadeInUp 1s ease forwards 2.8s;
+}
+@keyframes fadeInUp { to { opacity: 1; transform: translateY(0); } }
+
+.card {
+  background: var(--card-bg);
+  border-radius: 16px;
+  padding: 12px;
+  margin-bottom: 12px;
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(8px);
+  transition: all 0.25s ease;
+  overflow: hidden;
+  max-height: 80px;
+  cursor: pointer;
+  animation: cardAppear 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+  position: relative;
+}
+.card:hover { 
+  transform: scale(1.02);
+  animation: fireGlow 2s ease-in-out infinite;
+}
+.card.expanded { max-height: 300px; }
+.card-content { opacity: 0; transition: opacity 0.3s ease; }
+.card.expanded .card-content { opacity: 1; }
+
+/* Enhanced Back Button */
+.back-button {
+  display: inline-flex;
+  align-items: center;
+  background: var(--accent);
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 50px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  margin-bottom: 16px;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  box-shadow: 0 4px 12px rgba(30, 58, 138, 0.3);
+  position: relative;
+  overflow: hidden;
+}
+
+.back-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+  transition: left 0.5s;
+}
+
+.back-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(30, 58, 138, 0.4);
+}
+
+.back-button:hover::before {
+  left: 100%;
+}
+
+.back-button:active {
+  transform: translateY(-1px);
+  box-shadow: 0 3px 10px rgba(30, 58, 138, 0.4);
+}
+
+.back-button i {
+  margin-right: 8px;
+  transition: transform 0.3s ease;
+}
+
+.back-button:hover i {
+  transform: translateX(-3px);
+}
+
+/* Mobile Optimized Schedule Table */
+.schedule-container {
+  overflow-x: auto;
+  margin-top: 15px;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px var(--shadow);
+  -webkit-overflow-scrolling: touch;
+}
+
+.schedule-table {
+  width: 100%;
+  min-width: 600px;
+  border-collapse: collapse;
+  font-size: 0.75rem;
+}
+
+.schedule-table th, .schedule-table td {
+  padding: 8px 6px;
+  text-align: left;
+  border-bottom: 1px solid rgba(0,0,0,0.1);
+  white-space: nowrap;
+}
+
+.schedule-table th {
+  background: var(--accent);
+  color: white;
+  font-weight: 600;
+  text-align: center;
+  position: sticky;
+  left: 0;
+}
+
+.schedule-table tr:nth-child(even) {
+  background: rgba(0,0,0,0.03);
+}
+
+.break-row {
+  background: rgba(234, 88, 12, 0.15) !important;
+  font-weight: 600;
+  color: var(--orange);
+  animation: flameFlicker 3s ease-in-out infinite;
+}
+
+.day-monday { border-left: 4px solid #DC2626; }
+.day-tuesday { border-left: 4px solid #EA580C; }
+.day-wednesday { border-left: 4px solid #F59E0B; }
+.day-thursday { border-left: 4px solid #B91C1C; }
+.day-friday { border-left: 4px solid #FDBA74; }
+.day-saturday { border-left: 4px solid #FEF3C7; }
+
+/* Events Page */
+.event-card {
+  display: flex;
+  margin-bottom: 16px;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 10px var(--shadow);
+  background: var(--card-bg);
+  transition: transform 0.3s ease;
+}
+
+.event-card:hover {
+  transform: translateY(-3px);
+}
+
+.event-date {
+  background: var(--accent);
+  color: white;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 70px;
+}
+
+.event-date .day {
+  font-size: 1.3rem;
+  font-weight: 700;
+}
+
+.event-date .month {
+  font-size: 0.8rem;
+  opacity: 0.9;
+}
+
+.event-details {
+  padding: 12px;
+  flex: 1;
+}
+
+.event-title {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 4px;
+  line-height: 1.2;
+}
+
+.event-time {
+  font-size: 0.8rem;
+  opacity: 0.8;
+  margin-bottom: 6px;
+}
+
+.event-description {
+  font-size: 0.8rem;
+  opacity: 0.7;
+  line-height: 1.3;
+}
+
+/* About Page */
+.about-section {
+  margin-bottom: 20px;
+}
+
+.about-section h3 {
+  color: var(--accent);
+  margin-bottom: 8px;
+  border-bottom: 2px solid var(--accent);
+  padding-bottom: 4px;
+  font-size: 1.1rem;
+}
+
+.dev-card {
+  display: flex;
+  align-items: center;
+  padding: 12px;
+  background: var(--card-bg);
+  border-radius: 12px;
+  margin-bottom: 12px;
+  box-shadow: 0 4px 10px var(--shadow);
+  transition: transform 0.3s ease;
+}
+
+.dev-card:hover {
+  transform: translateX(3px);
+}
+
+.dev-avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: var(--gradient);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 700;
+  font-size: 1rem;
+  margin-right: 12px;
+  flex-shrink: 0;
+}
+
+.dev-info h4 {
+  margin: 0 0 4px 0;
+  font-size: 1rem;
+}
+
+.dev-info p {
+  margin: 0;
+  opacity: 0.8;
+  font-size: 0.8rem;
+}
+
+/* News Card Styles */
+.news-card {
+  max-height: none;
+  cursor: default;
+  margin-bottom: 16px;
+  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.news-card:hover {
+  transform: translateY(-3px);
+}
+
+.news-title {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 6px;
+  line-height: 1.2;
+}
+
+.news-description {
+  font-size: 0.8rem;
+  opacity: 0.8;
+  line-height: 1.3;
+  margin-bottom: 8px;
+}
+
+.news-meta {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.7rem;
+  opacity: 0.7;
+}
+
+.news-link {
+  color: var(--accent);
+  font-size: 0.7rem;
+  text-decoration: none;
+  display: inline-block;
+  margin-top: 6px;
+  font-weight: 600;
+}
+
+.news-link:hover {
+  text-decoration: underline;
+}
+
+/* Mobile Optimized Navigation */
+nav {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  background: var(--card-bg);
+  display: flex;
+  justify-content: space-around;
+  border-top: 1px solid #ccc;
+  padding: 8px 0;
+  backdrop-filter: blur(10px);
+  z-index: 10;
+  padding-bottom: calc(8px + env(safe-area-inset-bottom));
+}
+nav button {
+  background: none;
+  border: none;
+  color: var(--text-color);
+  font-size: 1em;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  flex: 1;
+  padding: 6px 0;
+  position: relative;
+}
+nav button.active { 
+  color: var(--accent); 
+  transform: translateY(-6px);
+  animation: flameFlicker 2s ease-in-out infinite;
+}
+nav button.active::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  width: 6px;
+  height: 6px;
+  background: var(--accent);
+  border-radius: 50%;
+  animation: fireGlow 2s ease-in-out infinite;
+}
+nav button span {
+  font-size: 0.65rem;
+  margin-top: 2px;
+}
+
+input, textarea {
+  width: 100%;
+  padding: 10px;
+  border-radius: 12px;
+  border: 1px solid #ccc;
+  margin-bottom: 10px;
+  background-color: var(--card-bg);
+  color: var(--text-color);
+  backdrop-filter: blur(6px);
+  font-size: 0.9em;
+  transition: 0.3s;
+  box-sizing: border-box;
+}
+input:focus {
+  outline: none;
+  border: 1px solid var(--accent);
+  box-shadow: 0 0 6px var(--accent);
+}
+
+button.primary {
+  background: var(--gradient);
+  color: white;
+  border: none;
+  padding: 14px;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+button.primary:hover {
+  transform: translateY(-2px);
+  animation: fireGlow 1.5s ease-in-out infinite;
+  box-shadow: var(--fire-glow);
+}
+
+/* Enhanced Todo List Styles */
+.todo-container {
+  margin-top: 16px;
+}
+
+.todo-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.todo-stats {
+  display: flex;
+  gap: 10px;
+  font-size: 0.8rem;
+}
+
+.todo-stat {
+  background: var(--card-bg);
+  padding: 6px 12px;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  box-shadow: 0 2px 5px var(--shadow);
+}
+
+.todo-input-container {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.todo-input {
+  flex: 1;
+  padding: 12px 16px;
+  border-radius: 12px;
+  border: 1px solid #cbd5e1;
+  background: var(--card-bg);
+  color: var(--text-color);
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+}
+
+.todo-input:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.1);
+}
+
+.add-todo-btn {
+  background: var(--accent);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  padding: 0 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 50px;
+}
+
+.add-todo-btn:hover {
+  background: var(--accent-hover);
+  transform: scale(1.05);
+}
+
+.todo-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px;
+  background: var(--card-bg);
+  border-radius: 12px;
+  margin-bottom: 10px;
+  box-shadow: 0 2px 8px var(--shadow);
+  transition: all 0.3s ease;
+  animation: todoAppear 0.4s ease-out;
+}
+
+@keyframes todoAppear {
+  0% { opacity: 0; transform: translateY(10px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+.todo-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px var(--shadow);
+}
+
+.todo-item.completed {
+  opacity: 0.7;
+  background: rgba(30, 58, 138, 0.05);
+}
+
+.todo-content {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+}
+
+.todo-checkbox {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 2px solid #cbd5e1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+}
+
+.todo-checkbox.checked {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+.todo-checkbox.checked::after {
+  content: '✓';
+  color: white;
+  font-size: 12px;
+}
+
+.todo-text {
+  flex: 1;
+  word-break: break-word;
+  transition: 0.3s;
+  font-size: 0.9rem;
+}
+
+.todo-item.completed .todo-text {
+  text-decoration: line-through;
+  opacity: 0.6;
+}
+
+.todo-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.todo-action-btn {
+  background: none;
+  border: none;
+  padding: 6px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  color: var(--text-color);
+  opacity: 0.7;
+}
+
+.todo-action-btn:hover {
+  opacity: 1;
+  background: rgba(0,0,0,0.05);
+}
+
+.todo-categories {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.todo-category {
+  background: var(--card-bg);
+  border: 1px solid rgba(0,0,0,0.1);
+  border-radius: 20px;
+  padding: 6px 12px;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.todo-category.active {
+  background: var(--accent);
+  color: white;
+  border-color: var(--accent);
+}
+
+.todo-empty {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--text-color);
+  opacity: 0.6;
+}
+
+.todo-empty i {
+  font-size: 2rem;
+  margin-bottom: 10px;
+  opacity: 0.5;
+}
+
+.fade-in { animation: fadeIn 0.5s ease; }
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.slide-out { animation: slideOut 0.4s forwards; }
+@keyframes slideOut {
+  from { opacity: 1; transform: translateX(0); }
+  to { opacity: 0; transform: translateX(40px); }
+}
+
+/* --- Chat Animation --- */
+.typing {
+  display: inline-block;
+  width: 1ch;
+  overflow: hidden;
+  animation: blink 1s steps(1) infinite;
+}
+@keyframes blink { 50% { opacity: 0; } }
+
+/* Loading animation */
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 16px;
+}
+
+.loading-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: var(--accent);
+  margin: 0 3px;
+  animation: loading 1.4s ease-in-out infinite both;
+}
+
+.loading-dot:nth-child(1) { animation-delay: -0.32s; }
+.loading-dot:nth-child(2) { animation-delay: -0.16s; }
+
+@keyframes loading {
+  0%, 80%, 100% { transform: scale(0); }
+  40% { transform: scale(1); }
+}
+
+/* Improved animations for iOS-like smoothness */
+.card, .todo-item, .news-card, .event-card, .dev-card {
+  animation: cardAppear 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+}
+
+@keyframes cardAppear {
+  0% { opacity: 0; transform: translateY(20px) scale(0.95); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* Tab transition */
+.tab-content {
+  animation: tabSwitch 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+}
+
+@keyframes tabSwitch {
+  0% { opacity: 0; transform: translateX(20px); }
+  100% { opacity: 1; transform: translateX(0); }
+}
+
+/* Mobile-first responsive design */
+@media (max-width: 480px) {
+  .header-title {
+    font-size: 1.1rem;
+  }
+  
+  .content {
+    padding: 12px;
+    padding-bottom: 70px;
+  }
+  
+  .card {
+    padding: 10px;
+    margin-bottom: 10px;
+  }
+  
+  nav button span {
+    font-size: 0.6rem;
+  }
+  
+  .event-date {
+    min-width: 60px;
+    padding: 10px;
+  }
+  
+  .event-date .day {
+    font-size: 1.1rem;
+  }
+  
+  .dev-avatar {
+    width: 45px;
+    height: 45px;
+    font-size: 0.9rem;
+  }
+  
+  .login-container {
+    padding: 20px;
+  }
+}
+
+/* Prevent horizontal scroll on mobile */
+html, body {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+/* ======================= AI CHAT STYLES ======================= */
+.chat-container {
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 200px);
+  max-height: 500px;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 15px var(--shadow);
+  background: var(--card-bg);
+  backdrop-filter: blur(8px);
+}
+
+.chat-header {
+  background: var(--gradient);
+  color: white;
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.chat-header h3 {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.chat-status {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.75rem;
+  opacity: 0.9;
+}
+
+.status-indicator {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #4ade80;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% { opacity: 1; }
+  50% { opacity: 0.5; }
+  100% { opacity: 1; }
+}
+
+.chat-messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  -webkit-overflow-scrolling: touch;
+}
+
+.message {
+  max-width: 85%;
+  padding: 10px 14px;
+  border-radius: 18px;
+  line-height: 1.4;
+  font-size: 0.9rem;
+  animation: messageSlide 0.3s ease-out;
+  word-wrap: break-word;
+}
+
+@keyframes messageSlide {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.user-message {
+  align-self: flex-end;
+  background: var(--accent);
+  color: white;
+  border-bottom-right-radius: 4px;
+}
+
+.ai-message {
+  align-self: flex-start;
+  background: var(--card-bg);
+  border: 1px solid rgba(0,0,0,0.1);
+  border-bottom-left-radius: 4px;
+}
+
+.typing-indicator {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 10px 14px;
+  background: var(--card-bg);
+  border: 1px solid rgba(0,0,0,0.1);
+  border-radius: 18px;
+  border-bottom-left-radius: 4px;
+  align-self: flex-start;
+  font-size: 0.8rem;
+  color: var(--text-color);
+  opacity: 0.7;
+}
+
+.typing-dots {
+  display: flex;
+  gap: 3px;
+}
+
+.typing-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+  animation: typing 1.4s infinite ease-in-out;
+}
+
+.typing-dot:nth-child(1) { animation-delay: -0.32s; }
+.typing-dot:nth-child(2) { animation-delay: -0.16s; }
+
+@keyframes typing {
+  0%, 80%, 100% { transform: scale(0.8); opacity: 0.5; }
+  40% { transform: scale(1); opacity: 1; }
+}
+
+.chat-input-container {
+  display: flex;
+  padding: 12px;
+  gap: 8px;
+  border-top: 1px solid rgba(0,0,0,0.1);
+  background: var(--card-bg);
+}
+
+.chat-input {
+  flex: 1;
+  border-radius: 24px;
+  padding: 10px 16px;
+  border: 1px solid rgba(0,0,0,0.1);
+  background: var(--bg-color);
+  color: var(--text-color);
+  font-size: 0.9rem;
+  resize: none;
+  max-height: 100px;
+  transition: all 0.3s ease;
+  -webkit-appearance: none;
+}
+
+.chat-input:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px rgba(30, 58, 138, 0.2);
+}
+
+.send-button {
+  background: var(--gradient);
+  color: white;
+  border: none;
+  padding: 14px;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.send-button:hover {
+  transform: translateY(-2px);
+  animation: fireGlow 1.5s ease-in-out infinite;
+  box-shadow: var(--fire-glow);
+}
+
+.send-button:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.chat-suggestions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 0 12px 12px;
+  background: var(--card-bg);
+}
+
+.suggestion-chip {
+  background: rgba(30, 58, 138, 0.1);
+  color: var(--accent);
+  border: 1px solid rgba(30, 58, 138, 0.2);
+  border-radius: 16px;
+  padding: 6px 12px;
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.suggestion-chip:hover {
+  background: rgba(30, 58, 138, 0.2);
+  transform: translateY(-2px);
+}
+
+.chat-actions {
+  display: flex;
+  justify-content: flex-end;
+  padding: 8px 12px;
+  background: var(--card-bg);
+  border-top: 1px solid rgba(0,0,0,0.1);
+}
+
+.clear-chat-button {
+  background: transparent;
+  color: var(--text-color);
+  border: 1px solid rgba(0,0,0,0.1);
+  border-radius: 16px;
+  padding: 6px 12px;
+  font-size: 0.75rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  transition: all 0.3s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.clear-chat-button:hover {
+  background: rgba(255, 0, 0, 0.1);
+  color: #ff4444;
+}
+
+/* API Key Input */
+.api-key-container {
+  margin-bottom: 16px;
+}
+
+.api-key-input {
+  display: flex;
+  gap: 8px;
+}
+
+.api-key-input input {
+  flex: 1;
+}
+
+.api-key-status {
+  font-size: 0.75rem;
+  margin-top: 4px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px;
+  border-radius: 8px;
+  background: rgba(30, 58, 138, 0.1);
+  border: 1px solid rgba(30, 58, 138, 0.2);
+}
+
+.api-key-status.valid {
+  background: rgba(6, 214, 160, 0.1);
+  border-color: rgba(6, 214, 160, 0.2);
+  color: #06d6a0;
+}
+
+.api-key-status.invalid {
+  background: rgba(255, 107, 107, 0.1);
+  border-color: rgba(255, 107, 107, 0.2);
+  color: #ff6b6b;
+}
+
+/* Chat History */
+.chat-history {
+  margin-top: 16px;
+}
+
+.chat-history-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  border-radius: 12px;
+  background: var(--card-bg);
+  margin-bottom: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.chat-history-item:hover {
+  background: rgba(30, 58, 138, 0.1);
+  transform: translateX(3px);
+}
+
+.chat-history-preview {
+  font-size: 0.8rem;
+  opacity: 0.7;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  flex: 1;
+  margin-right: 10px;
+}
+
+.chat-history-date {
+  font-size: 0.7rem;
+  opacity: 0.5;
+  flex-shrink: 0;
+}
+
+/* AI Model Selector */
+.ai-model-selector {
+  margin-bottom: 16px;
+  background: var(--card-bg);
+  padding: 12px 16px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px var(--shadow);
+}
+
+.ai-model-selector label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.model-select {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid rgba(0,0,0,0.1);
+  background: var(--bg-color);
+  color: var(--text-color);
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+  -webkit-appearance: none;
+}
+
+.model-select:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px rgba(30, 58, 138, 0.2);
+}
+
+/* Responsive adjustments for chat */
+@media (max-width: 480px) {
+  .chat-container {
+    height: calc(100vh - 180px);
+  }
+  
+  .message {
+    max-width: 90%;
+  }
+  
+  .chat-suggestions {
+    padding: 0 8px 8px;
+  }
+  
+  .suggestion-chip {
+    font-size: 0.7rem;
+    padding: 4px 10px;
+  }
+}
+
+/* ======================= FACULTY STYLES ======================= */
+.staff-section {
+  margin-top: 24px;
+  margin-bottom: 24px;
+}
+
+.staff-section h3 {
+  color: var(--accent);
+  margin-bottom: 12px;
+  border-bottom: 2px solid var(--accent);
+  padding-bottom: 6px;
+  font-size: 1.1rem;
+}
+
+.staff-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 12px;
+}
+
+.staff-card {
+  background: var(--card-bg);
+  border-radius: 16px;
+  padding: 16px;
+  box-shadow: 0 4px 10px var(--shadow);
+  backdrop-filter: blur(8px);
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  border-left: 4px solid var(--accent);
+  animation: staffCardAppear 0.6s ease-out both;
+  transform-origin: center bottom;
+}
+
+.staff-card:nth-child(1) { animation-delay: 0.1s; }
+.staff-card:nth-child(2) { animation-delay: 0.2s; }
+.staff-card:nth-child(3) { animation-delay: 0.3s; }
+.staff-card:nth-child(4) { animation-delay: 0.4s; }
+.staff-card:nth-child(5) { animation-delay: 0.5s; }
+.staff-card:nth-child(6) { animation-delay: 0.6s; }
+
+@keyframes staffCardAppear {
+  0% { 
+    opacity: 0; 
+    transform: translateY(20px) scale(0.95); 
+  }
+  100% { 
+    opacity: 1; 
+    transform: translateY(0) scale(1); 
+  }
+}
+
+.staff-card:hover {
+  transform: translateY(-5px) scale(1.02);
+  box-shadow: 0 8px 20px var(--shadow);
+}
+
+.staff-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.staff-avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: var(--gradient);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 700;
+  font-size: 1.2rem;
+  flex-shrink: 0;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.staff-info {
+  flex: 1;
+}
+
+.staff-name {
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0 0 4px 0;
+  color: var(--text-color);
+}
+
+.staff-role {
+  font-size: 0.8rem;
+  opacity: 0.8;
+  margin: 0;
+}
+
+.staff-experience {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 8px;
+  font-size: 0.75rem;
+  opacity: 0.9;
+}
+
+.experience-badge {
+  background: rgba(30, 58, 138, 0.1);
+  color: var(--accent);
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 0.7rem;
+}
+
+.staff-department {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 8px;
+  font-size: 0.75rem;
+  opacity: 0.7;
+}
+
+.staff-contact {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 8px;
+  font-size: 0.75rem;
+  opacity: 0.7;
+}
+
+/* iOS-specific optimizations */
+@supports (-webkit-touch-callout: none) {
+  .staff-card {
+    -webkit-backface-visibility: hidden;
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+  }
+  
+  .staff-card:hover {
+    transform: translateY(-5px) scale(1.02);
+  }
+  
+  .chat-messages {
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  .send-button, .suggestion-chip, .clear-chat-button {
+    -webkit-tap-highlight-color: transparent;
+  }
+  
+  input, textarea, .model-select {
+    -webkit-appearance: none;
+    border-radius: 12px;
+  }
+}
+
+/* Mobile responsive adjustments */
+@media (max-width: 480px) {
+  .staff-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .staff-card {
+    padding: 14px;
+  }
+  
+  .staff-avatar {
+    width: 45px;
+    height: 45px;
+    font-size: 1rem;
+  }
+}
+
+/* ======================= MEDIASTACK NEWS STYLES ======================= */
+.news-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.news-title {
+  flex: 1;
+  margin: 0;
+}
+
+.refresh-button {
+  background: var(--card-bg);
+  border: 1px solid rgba(0,0,0,0.1);
+  border-radius: 50%;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  color: var(--text-color);
+}
+
+.refresh-button:hover {
+  background: rgba(30, 58, 138, 0.1);
+  transform: rotate(180deg);
+}
+
+.refresh-button.loading {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.news-categories {
+  display: flex;
+  gap: 8px;
+  margin: 16px 0;
+  flex-wrap: wrap;
+}
+
+.news-category-btn {
+  background: var(--card-bg);
+  border: 1px solid rgba(0,0,0,0.1);
+  border-radius: 20px;
+  padding: 8px 16px;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  color: var(--text-color);
+  white-space: nowrap;
+}
+
+.news-category-btn.active {
+  background: var(--accent);
+  color: white;
+  border-color: var(--accent);
+}
+
+.news-category-btn:hover:not(.active) {
+  background: rgba(30, 58, 138, 0.1);
+}
+
+.news-container {
+  max-height: calc(100vh - 250px);
+  overflow-y: auto;
+  padding-right: 8px;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+}
+
+.news-container::-webkit-scrollbar {
+  width: 6px;
+}
+
+.news-container::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 3px;
+}
+
+.news-container::-webkit-scrollbar-thumb {
+  background: var(--accent);
+  border-radius: 3px;
+}
+
+.news-container::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-hover);
+}
+
+.news-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+  padding: 8px 0;
+}
+
+.mediastack-news-card {
+  background: var(--card-bg);
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 0;
+  box-shadow: 0 4px 15px var(--shadow);
+  backdrop-filter: blur(8px);
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  border-left: 4px solid var(--accent);
+  animation: cardAppear 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+  position: relative;
+  overflow: hidden;
+}
+
+.mediastack-news-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+  transition: left 0.5s;
+}
+
+.mediastack-news-card:hover::before {
+  left: 100%;
+}
+
+.mediastack-news-card:hover {
+  transform: translateY(-5px) scale(1.02);
+  box-shadow: 0 8px 25px var(--shadow);
+}
+
+.mediastack-news-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 10px;
+  line-height: 1.3;
+  color: var(--text-color);
+}
+
+.mediastack-news-description {
+  font-size: 0.9rem;
+  opacity: 0.8;
+  line-height: 1.4;
+  margin-bottom: 14px;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.mediastack-news-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.8rem;
+  opacity: 0.7;
+  margin-bottom: 12px;
+}
+
+.mediastack-news-source {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 600;
+}
+
+.mediastack-news-date {
+  font-size: 0.75rem;
+}
+
+.mediastack-news-category {
+  background: rgba(30, 58, 138, 0.1);
+  color: var(--accent);
+  padding: 6px 12px;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  display: inline-block;
+  margin-bottom: 12px;
+}
+
+.mediastack-news-link {
+  color: var(--accent);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.85rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.3s ease;
+}
+
+.mediastack-news-link:hover {
+  transform: translateX(3px);
+  color: var(--accent-hover);
+}
+
+.news-image {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 12px;
+  margin-bottom: 12px;
+  background: var(--gradient);
+}
+
+.news-image-placeholder {
+  background: var(--gradient);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  flex-direction: column;
+  gap: 8px;
+  height: 180px;
+  border-radius: 12px;
+  margin-bottom: 12px;
+}
+
+.mediastack-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  text-align: center;
+}
+
+.mediastack-loading h4 {
+  margin: 20px 0 10px 0;
+  color: var(--accent);
+}
+
+.mediastack-loading p {
+  margin: 0;
+  opacity: 0.7;
+  font-size: 0.9rem;
+}
+
+.mediastack-error {
+  background: var(--card-bg);
+  border-radius: 16px;
+  padding: 40px 20px;
+  text-align: center;
+  margin: 16px 0;
+}
+
+.mediastack-error h4 {
+  color: #ff6b6b;
+  margin-bottom: 12px;
+}
+
+.mediastack-error p {
+  opacity: 0.7;
+  font-size: 0.9rem;
+  margin-bottom: 20px;
+}
+
+.retry-button {
+  background: var(--accent);
+  color: white;
+  border: none;
+  border-radius: 20px;
+  padding: 10px 20px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.3s ease;
+}
+
+.retry-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(30, 58, 138, 0.3);
+}
+
+.news-counter {
+  font-size: 0.8rem;
+  opacity: 0.7;
+  text-align: center;
+  margin-top: 12px;
+  padding: 8px;
+  background: var(--card-bg);
+  border-radius: 12px;
+}
+
+/* ======================= SOCIAL FEED STYLES ======================= */
+.social-feed {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.achievement-card {
+  background: var(--card-bg);
+  border-radius: 16px;
+  padding: 16px;
+  box-shadow: 0 4px 10px var(--shadow);
+  transition: all 0.3s ease;
+  border-left: 4px solid var(--gold);
+}
+
+.achievement-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 15px var(--shadow);
+}
+
+.achievement-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.achievement-avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: var(--gradient);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 700;
+  font-size: 1.2rem;
+  flex-shrink: 0;
+}
+
+.achievement-user h4 {
+  margin: 0 0 4px 0;
+  font-size: 1rem;
+  color: var(--text-color);
+}
+
+.achievement-user p {
+  margin: 0;
+  font-size: 0.8rem;
+  opacity: 0.7;
+}
+
+.achievement-content {
+  margin-bottom: 12px;
+}
+
+.achievement-title {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: var(--accent);
+}
+
+.achievement-description {
+  font-size: 0.9rem;
+  line-height: 1.4;
+  opacity: 0.8;
+}
+
+.achievement-certificate {
+  width: 100%;
+  border-radius: 12px;
+  margin-top: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.achievement-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 12px;
+  font-size: 0.75rem;
+  opacity: 0.7;
+}
+
+.achievement-date {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.achievement-likes {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* Animation for slide in from right */
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+</style>
+</head>
+<body>
+
+<!-- Splash Screen -->
+<div id="splash">
+  <img src="logo.png" alt="ALPHA AI&ML HIFI NOTEBOOK" class="splash-image">
+  <div id="splash-logo">ALPHA AI&ML HIFI NOTEBOOK</div>
+  <div id="splash-subtitle">Empowering Future Innovators ⚡</div>
+</div>
+
+<!-- Login Page -->
+<div id="loginPage">
+  <div class="login-container">
+    <img src="logo.png" alt="ALPHA AI&ML HIFI NOTEBOOK" class="login-logo">
+    <h2 class="login-title">ALPHA AI&ML HIFI NOTEBOOK</h2>
+    <p class="login-subtitle">Sign in to access your academic resources</p>
+    
+    <div class="login-form">
+      <div class="form-group">
+        <label for="username">Username</label>
+        <input type="text" id="username" placeholder="Enter your username">
+      </div>
+      
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" placeholder="Enter your password">
+      </div>
+      
+      <button class="login-button" onclick="login()">Sign In</button>
+    </div>
+    
+    <div class="login-footer">
+      <p>Demo Credentials: student / password123</p>
+    </div>
+  </div>
+</div>
+
+<!-- Slide Menu -->
+<div class="slide-menu" id="slideMenu">
+  <div class="menu-header">
+    <h3>Menu</h3>
+  </div>
+  <a href="#" class="menu-item" onclick="showPage('events')">
+    <i data-lucide="calendar"></i>
+    <span>Events</span>
+  </a>
+  <a href="#" class="menu-item" onclick="showPage('schedule')">
+    <i data-lucide="clock"></i>
+    <span>Schedule</span>
+  </a>
+  <a href="#" class="menu-item" onclick="showPage('faculty')">
+    <i data-lucide="users"></i>
+    <span>Faculty</span>
+  </a>
+  <a href="#" class="menu-item" onclick="showPage('about')">
+    <i data-lucide="info"></i>
+    <span>About</span>
+  </a>
+</div>
+
+<!-- Menu Overlay -->
+<div class="menu-overlay" id="menuOverlay" onclick="closeMenu()"></div>
+
+<!-- Header with integrated news ticker -->
+<header>
+  <div class="header-content">
+    <button class="menu-toggle" id="menuToggle">
+      <i data-lucide="menu"></i>
+    </button>
+    <div class="header-title">ALPHA AI&ML HIFI NOTEBOOK</div>
+    <button class="dark-mode-toggle" id="darkToggle"><i data-lucide="moon"></i></button>
+  </div>
+  <div class="news-ticker">
+    <div class="news-icon">
+      <span></span>
+    </div>
+    <div class="news-ticker-content">
+      <span>🚀 Welcome to ALPHA AI&ML HIFI NOTEBOOK! </span>
+      <span>📚 Your complete academic companion</span>
+      <span>🎉 New features coming soon...</span>
+      <span>📢 Everything you need in one app</span>
+    </div>
+  </div>
+</header>
+
+<div class="content" id="mainContent"></div>
+
+<nav>
+  <button id="tasksTab" onclick="setActiveTab('tasks')"><i data-lucide='book-open'></i><span>Tasks</span></button>
+  <button id="todoTab" onclick="setActiveTab('todo')"><i data-lucide='check-circle'></i><span>To-Do</span></button>
+  <button id="newsTab" onclick="setActiveTab('news')"><i data-lucide='newspaper'></i><span>News</span></button>
+  <button id="chatTab" onclick="setActiveTab('chat')"><i data-lucide='bot'></i><span>AI Chat</span></button>
+  <button id="socialTab" onclick="setActiveTab('social')"><i data-lucide='users'></i><span>Social</span></button>
+</nav>
+
+<script>
+/* --- API KEYS --- */
+const GEMINI_API_KEY = "YOUR_GEMINI_API_KEY";
+const OPENAI_API_KEY = "YOUR_OPENAI_API_KEY";
+const MEDIASTACK_API_KEY = "27b37be5989fc39f677bea8376543d48";
+const MEDIASTACK_BASE_URL = "https://api.mediastack.com/v1/news";
+
+// News Categories for MediaStack
+const NEWS_CATEGORIES = {
+  general: { name: "📰 Top Stories", param: "general" },
+  technology: { name: "💻 Technology", param: "technology" },
+  business: { name: "💼 Business", param: "business" },
+  sports: { name: "⚽ Sports", param: "sports" },
+  entertainment: { name: "🎬 Entertainment", param: "entertainment" },
+  health: { name: "🏥 Health", param: "health" },
+  science: { name: "🔬 Science", param: "science" }
+};
+
+let currentCategory = 'general';
+let newsData = {};
+let isLoggedIn = false;
+
+/* --- LOGIN FUNCTIONALITY --- */
+function login() {
+  const username = document.getElementById('username').value;
+  const password = document.getElementById('password').value;
+  
+  // Demo credentials
+  if ((username === 'student' && password === 'password123') || 
+      (username === 'jeevan' && password === '9042273941') ||
+      (username === 'praveen' && password === 'praveen123')) {
+    
+    // Hide login page
+    const loginPage = document.getElementById('loginPage');
+    loginPage.style.display = 'none';
+    
+    // Show main app
+    document.getElementById('mainContent').style.display = 'block';
+    document.querySelector('header').style.display = 'block';
+    document.querySelector('nav').style.display = 'flex';
+    
+    isLoggedIn = true;
+    
+    // Initialize the app
+    initializeApp();
+    
+  } else {
+    alert('Invalid credentials. Try: student / password123');
+  }
+}
+
+function initializeApp() {
+  // Initialize all app components
+  lucide.createIcons();
+  setActiveTab("todo");
+  
+  // Hide splash screen after delay
+  setTimeout(() => {
+    const splash = document.getElementById("splash");
+    if(splash) splash.style.display = "none";
+  }, 1000);
+}
+
+/* --- DARK MODE --- */
+const toggle=document.getElementById("darkToggle");
+if(localStorage.getItem("darkMode")==="true")document.body.classList.add("dark");
+updateDarkIcon();
+toggle.addEventListener("click",()=>{document.body.classList.toggle("dark");localStorage.setItem("darkMode",document.body.classList.contains("dark"));updateDarkIcon();});
+function updateDarkIcon(){const icon=document.body.classList.contains("dark")?"sun":"moon";toggle.innerHTML=`<i data-lucide="${icon}"></i>`;lucide.createIcons();}
+
+/* --- SLIDE MENU --- */
+const menuToggle = document.getElementById("menuToggle");
+const slideMenu = document.getElementById("slideMenu");
+const menuOverlay = document.getElementById("menuOverlay");
+
+menuToggle.addEventListener("click", toggleMenu);
+
+function toggleMenu() {
+  slideMenu.classList.toggle("active");
+  menuOverlay.classList.toggle("active");
+}
+
+function closeMenu() {
+  slideMenu.classList.remove("active");
+  menuOverlay.classList.remove("active");
+}
+
+// Swipe to close functionality
+let touchStartX = 0;
+let touchEndX = 0;
+
+document.addEventListener('touchstart', e => {
+  touchStartX = e.changedTouches[0].screenX;
+});
+
+document.addEventListener('touchend', e => {
+  touchEndX = e.changedTouches[0].screenX;
+  handleSwipe();
+});
+
+function handleSwipe() {
+  if (slideMenu.classList.contains('active') && touchEndX < touchStartX - 50) {
+    closeMenu();
+  }
+}
+
+/* --- PAGE MANAGEMENT --- */
+let currentPage = "main";
+
+function showPage(page) {
+  currentPage = page;
+  closeMenu();
+  
+  const content = document.getElementById("mainContent");
+  content.classList.remove("tab-content");
+  void content.offsetWidth; // Trigger reflow
+  content.classList.add("tab-content");
+  
+  if (page === "events") {
+    renderEventsPage();
+  } else if (page === "schedule") {
+    renderSchedulePage();
+  } else if (page === "faculty") {
+    renderFacultyPage();
+  } else if (page === "about") {
+    renderAboutPage();
+  } else if (page.startsWith("subject-")) {
+    renderSubjectPage(page.replace("subject-", ""));
+  }
+}
+
+function goBack() {
+  currentPage = "main";
+  setActiveTab(currentTab);
+}
+
+function renderEventsPage() {
+  const content = document.getElementById("mainContent");
+  content.innerHTML = `
+    <button class="back-button" onclick="goBack()">
+      <i data-lucide="arrow-left"></i>
+      Back to Main
+    </button>
+    <h2>College Events</h2>
+    <div class="event-card">
+      <div class="event-date">
+        <div class="day">07</div>
+        <div class="month">NOV</div>
+      </div>
+      <div class="event-details">
+        <div class="event-title">PSNA TECKNOWFEST'2025</div>
+        <div class="event-time">9:00 AM - 5:00 PM | Main Auditorium | Reg fee: 200</div>
+        <div class="event-description">Paper presentation, decodex, web innovate, ideathon, code quest arena, talentra</div>
+      </div>
+    </div>
+    <div class="event-card">
+      <div class="event-date">
+        <div class="day">22</div>
+        <div class="month">OCT</div>
+      </div>
+      <div class="event-details">
+        <div class="event-title">AI & ML Workshop</div>
+        <div class="event-time">10:00 AM - 4:00 PM | AI Lab</div>
+        <div class="event-description">Hands-on workshop on machine learning algorithms and applications.</div>
+      </div>
+    </div>
+    <div class="event-card">
+      <div class="event-date">
+        <div class="day">05</div>
+        <div class="month">NOV</div>
+      </div>
+      <div class="event-details">
+        <div class="event-title">Hackathon</div>
+        <div class="event-time">6:00 PM - 11:00 PM | Computer Center</div>
+        <div class="event-description">24-hour coding competition with exciting prizes.</div>
+      </div>
+    </div>
+  `;
+  lucide.createIcons();
+}
+
+function renderSchedulePage() {
+  const content = document.getElementById("mainContent");
+  content.innerHTML = `
+    <button class="back-button" onclick="goBack()">
+      <i data-lucide="arrow-left"></i>
+      Back to Main
+    </button>
+    <h2>Class Schedule</h2>
+    <div class="schedule-container">
+      <table class="schedule-table">
+        <thead>
+          <tr>
+            <th>Time</th>
+            <th>Monday</th>
+            <th>Tuesday</th>
+            <th>Wednesday</th>
+            <th>Thursday</th>
+            <th>Friday</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>9:00-9:50</td>
+            <td class="day-monday">Discrete Mathematics</td>
+            <td class="day-tuesday">Foundation of Data Science</td>
+            <td class="day-wednesday">Digital Principles & Computer Organization</td>
+            <td class="day-thursday">Data Structures & Algorithms using Python</td>
+            <td class="day-friday">Object Oriented Programming using Java</td>
+          </tr>
+          <tr>
+            <td>9:51-10:35</td>
+            <td class="day-monday">Data Structures & Algorithms using Python</td>
+            <td class="day-tuesday">Digital Principles & Computer Organization</td>
+            <td class="day-wednesday">Object Oriented Programming using Java</td>
+            <td class="day-thursday">Foundation of Data Science</td>
+            <td class="day-friday">Discrete Mathematics</td>
+          </tr>
+          <tr class="break-row">
+            <td>10:36-11:00</td>
+            <td colspan="6" style="text-align: center; font-weight: 600;">BREAK</td>
+          </tr>
+          <tr>
+            <td>11:01-11:45</td>
+            <td class="day-monday">Discrete Mathematics</td>
+            <td class="day-tuesday">Discrete Mathematics</td>
+            <td class="day-wednesday">Foundation of Data Science</td>
+            <td class="day-thursday">Digital Principles & Computer Organization</td>
+            <td class="day-friday">Foundation of Data Science</td>
+          </tr>
+          <tr>
+            <td>11:46-12:30</td>
+            <td class="day-monday">Digital Principles & Computer Organization</td>
+            <td class="day-tuesday">Object Oriented Programming using Java</td>
+            <td class="day-wednesday">Data Structures & Algorithms using Python</td>
+            <td class="day-thursday">Digital Principles & Computer Organization</td>
+            <td class="day-friday">Foundation of Data Science</td>
+          </tr>
+          <tr class="break-row">
+            <td>12:31-1:15</td>
+            <td colspan="6" style="text-align: center; font-weight: 600;">LUNCH BREAK</td>
+          </tr>
+          <tr>
+            <td>1:16-2:00</td>
+            <td class="day-monday">Object Oriented Programming using Java</td>
+            <td class="day-tuesday">Data Structures & Algorithms using Python</td>
+            <td class="day-wednesday">Foundation of Data Science</td>
+            <td class="day-thursday">Library</td>
+            <td class="day-friday">Core Training</td>
+          </tr>
+          <tr>
+            <td>2:01-2:45</td>
+            <td class="day-monday">Object Oriented Programming using Java</td>
+            <td class="day-tuesday">Data Structures & Algorithms using Python</td>
+            <td class="day-wednesday">Foundation of Data Science</td>
+            <td class="day-thursday">Discrete Mathematics</td>
+            <td class="day-friday">Discrete Mathematics</td>
+          </tr>
+          <tr>
+            <td>2:46-3:30</td>
+            <td class="day-monday">Object Oriented Programming using Java</td>
+            <td class="day-tuesday">Data Structures & Algorithms using Python</td>
+            <td class="day-wednesday">Foundation of Data Science</td>
+            <td class="day-thursday">Object Oriented Programming using Java</td>
+            <td class="day-friday">Mentor Meeting</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  `;
+  lucide.createIcons();
+}
+
+function renderFacultyPage() {
+  const content = document.getElementById("mainContent");
+  content.innerHTML = `
+    <button class="back-button" onclick="goBack()">
+      <i data-lucide="arrow-left"></i>
+      Back to Main
+    </button>
+    <h2>Faculty Members</h2>
+    
+    <div class="staff-section">
+      <h3>AI & ML Department</h3>
+      <div class="staff-grid" id="staffGrid">
+        <div class="staff-card">
+          <div class="staff-header">
+            <div class="staff-avatar">UN</div>
+            <div class="staff-info">
+              <h4 class="staff-name">Ummugulthum Natchiyar</h4>
+              <p class="staff-role">Head of AI & ML Department</p>
+            </div>
+          </div>
+          <div class="staff-experience">
+            <i data-lucide="award"></i>
+            <span>Experience:</span>
+            <div class="experience-badge">12+ years</div>
+          </div>
+          <div class="staff-department">
+            <i data-lucide="building"></i>
+            <span>Department: AI & ML</span>
+          </div>
+          <div class="staff-contact">
+            <i data-lucide="mail"></i>
+            <span>u.natchiyar@alpha.edu</span>
+          </div>
+        </div>
+        
+        <div class="staff-card">
+          <div class="staff-header">
+            <div class="staff-avatar">B</div>
+            <div class="staff-info">
+              <h4 class="staff-name">Bhavithra</h4>
+              <p class="staff-role">OOPS using Java</p>
+            </div>
+          </div>
+          <div class="staff-experience">
+            <i data-lucide="award"></i>
+            <span>Experience:</span>
+            <div class="experience-badge">8+ years</div>
+          </div>
+          <div class="staff-department">
+            <i data-lucide="building"></i>
+            <span>Department: AI & ML</span>
+          </div>
+          <div class="staff-contact">
+            <i data-lucide="mail"></i>
+            <span>bhavithra@alpha.edu</span>
+          </div>
+        </div>
+        
+        <div class="staff-card">
+          <div class="staff-header">
+            <div class="staff-avatar">MP</div>
+            <div class="staff-info">
+              <h4 class="staff-name">Manivael Pandian</h4>
+              <p class="staff-role">DSA Staff</p>
+            </div>
+          </div>
+          <div class="staff-experience">
+            <i data-lucide="award"></i>
+            <span>Experience:</span>
+            <div class="experience-badge">10+ years</div>
+          </div>
+          <div class="staff-department">
+            <i data-lucide="building"></i>
+            <span>Department: AI & ML</span>
+          </div>
+          <div class="staff-contact">
+            <i data-lucide="mail"></i>
+            <span>m.pandian@alpha.edu</span>
+          </div>
+        </div>
+        
+        <div class="staff-card">
+          <div class="staff-header">
+            <div class="staff-avatar">AL</div>
+            <div class="staff-info">
+              <h4 class="staff-name">Aiswarya Laxmi</h4>
+              <p class="staff-role">FDS Staff</p>
+            </div>
+          </div>
+          <div class="staff-experience">
+            <i data-lucide="award"></i>
+            <span>Experience:</span>
+            <div class="experience-badge">7+ years</div>
+          </div>
+          <div class="staff-department">
+            <i data-lucide="building"></i>
+            <span>Department: AI & ML</span>
+          </div>
+          <div class="staff-contact">
+            <i data-lucide="mail"></i>
+            <span>a.laxmi@alpha.edu</span>
+          </div>
+        </div>
+        
+        <div class="staff-card">
+          <div class="staff-header">
+            <div class="staff-avatar">MS</div>
+            <div class="staff-info">
+              <h4 class="staff-name">Meenakshi Sundharam</h4>
+              <p class="staff-role">DPCO Staff</p>
+            </div>
+          </div>
+          <div class="staff-experience">
+            <i data-lucide="award"></i>
+            <span>Experience:</span>
+            <div class="experience-badge">9+ years</div>
+          </div>
+          <div class="staff-department">
+            <i data-lucide="building"></i>
+            <span>Department: AI & ML</span>
+          </div>
+          <div class="staff-contact">
+            <i data-lucide="mail"></i>
+            <span>m.sundharam@alpha.edu</span>
+          </div>
+        </div>
+        
+        <div class="staff-card">
+          <div class="staff-header">
+            <div class="staff-avatar">S</div>
+            <div class="staff-info">
+              <h4 class="staff-name">Sridharan</h4>
+              <p class="staff-role">Mathematics Faculty</p>
+            </div>
+          </div>
+          <div class="staff-experience">
+            <i data-lucide="award"></i>
+            <span>Experience:</span>
+            <div class="experience-badge">15+ years</div>
+          </div>
+          <div class="staff-department">
+            <i data-lucide="building"></i>
+            <span>Department: AI & ML</span>
+          </div>
+          <div class="staff-contact">
+            <i data-lucide="mail"></i>
+            <span>sridharan@alpha.edu</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+  lucide.createIcons();
+}
+
+function renderAboutPage() {
+  const content = document.getElementById("mainContent");
+  content.innerHTML = `
+    <button class="back-button" onclick="goBack()">
+      <i data-lucide="arrow-left"></i>
+      Back to Main
+    </button>
+    <h2>About ALPHA AI&ML HIFI NOTEBOOK</h2>
+    
+    <div class="about-section">
+      <h3>Our Department</h3>
+      <p>The B.E Computer Science and Engineering (Artificial Intelligence & Machine Learning) Department at ALPHA College is at the forefront of technological education. We offer a comprehensive curriculum that blends theoretical knowledge with practical applications, preparing students for successful careers in the rapidly evolving fields of AI and ML.</p>
+      <p>Our program focuses on cutting-edge technologies including machine learning algorithms, neural networks, natural language processing, computer vision, and data analytics. Students gain hands-on experience through industry projects, research opportunities, and state-of-the-art laboratories.</p>
+    </div>
+    
+    <div class="about-section">
+      <h3>Development Team</h3>
+      <div class="dev-card">
+        <div class="dev-avatar">JR</div>
+        <div class="dev-info">
+          <h4>Jeevan Raj V</h4>
+          <p>Frontend Developer & UI/UX Designer</p>
+        </div>
+      </div>
+      <div class="dev-card">
+        <div class="dev-avatar">PR</div>
+        <div class="dev-info">
+          <h4>Praveen Raj M</h4>
+          <p>Lead Developer & Ideology Creator</p>
+        </div>
+      </div>
+    </div>
+    
+    <div class="about-section">
+      <h3>Contact Information</h3>
+      <p>Email: jraj98503@gmail.com</p>
+      <p>Phone: 9042273941</p>
+      <p>Location: AI&ML Department, 2nd year</p>
+    </div>
+  `;
+  lucide.createIcons();
+}
+
+function renderSubjectPage(subject) {
+  const subjectData = {
+    "dsa": {
+      title: "Data Structures & Algorithms using Python",
+      description: "This course covers fundamental data structures and algorithms using Python programming language. Topics include arrays, linked lists, stacks, queues, trees, graphs, sorting algorithms, searching algorithms, and algorithm analysis.",
+      topics: ["Arrays and Linked Lists", "Stacks and Queues", "Trees and Binary Search Trees", "Graphs and Graph Algorithms", "Sorting Algorithms", "Searching Algorithms", "Dynamic Programming", "Algorithm Analysis and Complexity"]
+    },
+    "fds": {
+      title: "Foundation of Data Science",
+      description: "This course introduces the fundamental concepts of data science, including data collection, preprocessing, analysis, and visualization. Students learn to work with real-world datasets and apply statistical methods to extract insights.",
+      topics: ["Introduction to Data Science", "Data Collection and Preprocessing", "Exploratory Data Analysis", "Statistical Methods", "Data Visualization", "Machine Learning Basics", "Big Data Concepts", "Data Ethics and Privacy"]
+    },
+    "oops": {
+      title: "Object Oriented Programming using Java",
+      description: "This course covers object-oriented programming concepts using Java. Topics include classes, objects, inheritance, polymorphism, encapsulation, abstraction, exception handling, and GUI programming.",
+      topics: ["Classes and Objects", "Inheritance and Polymorphism", "Encapsulation and Abstraction", "Exception Handling", "File I/O", "Collections Framework", "Multithreading", "GUI Programming with Swing"]
+    },
+    "dm": {
+      title: "Discrete Mathematics",
+      description: "This course covers mathematical structures that are fundamentally discrete rather than continuous. Topics include logic, set theory, combinatorics, graph theory, and mathematical reasoning.",
+      topics: ["Propositional Logic", "Set Theory", "Relations and Functions", "Combinatorics", "Graph Theory", "Trees and Networks", "Mathematical Induction", "Boolean Algebra"]
+    },
+    "dpco": {
+      title: "Digital Principles & Computer Organization",
+      description: "This course covers the fundamental principles of digital logic design and computer organization. Topics include number systems, logic gates, combinational and sequential circuits, processor architecture, and memory systems.",
+      topics: ["Number Systems and Codes", "Logic Gates and Boolean Algebra", "Combinational Circuits", "Sequential Circuits", "Processor Architecture", "Memory Systems", "Input/Output Organization", "Instruction Set Architecture"]
+    }
+  };
+  
+  const data = subjectData[subject];
+  const content = document.getElementById("mainContent");
+  
+  content.innerHTML = `
+    <button class="back-button" onclick="goBack()">
+      <i data-lucide="arrow-left"></i>
+      Back to Subjects
+    </button>
+    <h2>${data.title}</h2>
+    
+    <div class="about-section">
+      <h3>Course Description</h3>
+      <p>${data.description}</p>
+    </div>
+    
+    <div class="about-section">
+      <h3>Topics Covered</h3>
+      <ul>
+        ${data.topics.map(topic => `<li>${topic}</li>`).join('')}
+      </ul>
+    </div>
+    
+    <div class="about-section">
+      <h3>Resources</h3>
+      <p>Textbooks, reference materials, and online resources will be provided through the college portal. Additional practice problems and coding exercises are available in the lab sessions.</p>
+    </div>
+  `;
+  
+  lucide.createIcons();
+}
+
+/* --- TAB HANDLING --- */
+let currentTab = "todo";
+
+function setActiveTab(tab){
+  currentPage = "main";
+  document.querySelectorAll("nav button").forEach(b=>b.classList.remove("active"));
+  document.getElementById(tab+"Tab").classList.add("active");
+  
+  // Add tab transition effect
+  const content = document.getElementById("mainContent");
+  content.classList.remove("tab-content");
+  void content.offsetWidth; // Trigger reflow
+  content.classList.add("tab-content");
+  
+  renderTab(tab);
+  currentTab = tab;
+}
+
+/* --- TABS --- */
+function renderTab(tab){
+  const content=document.getElementById("mainContent");
+  if(tab==="tasks"){
+    content.innerHTML=`
+      <h2>SUBJECTS</h2>
+      <div class='card fade-in' onclick='showPage("subject-dsa")'><h3>Data Structures & Algorithms using Python</h3><div class='card-content'><p>Data Structures are organized ways to store and manage data efficiently. Algorithms are step-by-step procedures used to solve problems using that data.</p></div></div>
+      <div class='card fade-in' onclick='showPage("subject-fds")'><h3>Foundation of Data Science</h3><div class='card-content'><p>Learn the fundamentals of data collection, analysis, and visualization to extract meaningful insights from data.</p></div></div>
+      <div class='card fade-in' onclick='showPage("subject-oops")'><h3>Object Oriented Programming using Java</h3><div class='card-content'><p>Master the concepts of object-oriented programming including classes, objects, inheritance, polymorphism, and encapsulation.</p></div></div>
+      <div class='card fade-in' onclick='showPage("subject-dm")'><h3>Discrete Mathematics</h3><div class='card-content'><p>Study mathematical structures that are fundamentally discrete rather than continuous, including logic, sets, relations, and graphs.</p></div></div>
+      <div class='card fade-in' onclick='showPage("subject-dpco")'><h3>Digital Principles & Computer Organization</h3><div class='card-content'><p>Understand the fundamental principles of digital logic design and computer organization, from logic gates to processor architecture.</p></div></div>
+    `;
+  }else if(tab==="todo"){
+    renderTodoList();
+  }else if(tab==="news"){
+    renderMediaStackNews();
+  }else if(tab==="chat"){
+    renderAIChat();
+  }else if(tab==="social"){
+    content.innerHTML=`
+      <h2>Achievements Feed</h2>
+      <div class="social-feed">
+        <div class="achievement-card">
+          <div class="achievement-header">
+            <div class="achievement-avatar">JR</div>
+            <div class="achievement-user">
+              <h4>Jeevan Raj V</h4>
+              <p>AI & ML Student</p>
+            </div>
+          </div>
+          <div class="achievement-content">
+            <div class="achievement-title">Python Programming Excellence</div>
+            <div class="achievement-description">Awarded for outstanding performance in Python programming and developing innovative solutions for real-world problems using data structures and algorithms.</div>
+          </div>
+          <img src="certificate1.png" alt="Certificate" class="achievement-certificate" onerror="this.style.display='none'">
+          <div class="achievement-meta">
+            <div class="achievement-date">
+              <i data-lucide="calendar"></i>
+              <span>October 15, 2023</span>
+            </div>
+            <div class="achievement-likes">
+              <i data-lucide="heart"></i>
+              <span>42 likes</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="achievement-card">
+          <div class="achievement-header">
+            <div class="achievement-avatar">JR</div>
+            <div class="achievement-user">
+              <h4>Jeevan Raj V</h4>
+              <p>AI & ML Student</p>
+            </div>
+          </div>
+          <div class="achievement-content">
+            <div class="achievement-title">Data Science Project Award</div>
+            <div class="achievement-description">Recognized for developing an innovative predictive model that accurately forecasts student academic performance using machine learning techniques.</div>
+          </div>
+          <img src="certificate2.png" alt="Certificate" class="achievement-certificate" onerror="this.style.display='none'">
+          <div class="achievement-meta">
+            <div class="achievement-date">
+              <i data-lucide="calendar"></i>
+              <span>November 5, 2023</span>
+            </div>
+            <div class="achievement-likes">
+              <i data-lucide="heart"></i>
+              <span>38 likes</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="achievement-card">
+          <div class="achievement-header">
+            <div class="achievement-avatar">JR</div>
+            <div class="achievement-user">
+              <h4>Jeevan Raj V</h4>
+              <p>AI & ML Student</p>
+            </div>
+          </div>
+          <div class="achievement-content">
+            <div class="achievement-title">Hackathon Innovation Prize</div>
+            <div class="achievement-description">Won first place in the college hackathon for developing a smart campus navigation system using AI algorithms and mobile technology.</div>
+          </div>
+          <img src="certificate3.png" alt="Certificate" class="achievement-certificate" onerror="this.style.display='none'">
+          <div class="achievement-meta">
+            <div class="achievement-date">
+              <i data-lucide="calendar"></i>
+              <span>December 12, 2023</span>
+            </div>
+            <div class="achievement-likes">
+              <i data-lucide="heart"></i>
+              <span>56 likes</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+    lucide.createIcons();
+  }
+  lucide.createIcons();
+}
+
+function toggleExpand(card){card.classList.toggle("expanded");}
+
+/* --- TODO --- */
+let todos=[];
+function loadTodos(){const saved=localStorage.getItem("todos");todos=saved?JSON.parse(saved):[];renderTodos();}
+function saveTodos(){localStorage.setItem("todos",JSON.stringify(todos));}
+function addTodo(){const input=document.getElementById("todoInput");const text=input.value.trim();if(!text)return;todos.push({id:Date.now(),text,completed:false});saveTodos();renderTodos();input.value="";}
+function toggleTodo(id){const todo=todos.find(t=>t.id===id);todo.completed=!todo.completed;saveTodos();renderTodos();}
+function deleteTodo(id){const el=document.querySelector(`[data-id='${id}']`);el.classList.add("slide-out");setTimeout(()=>{todos=todos.filter(t=>t.id!==id);saveTodos();renderTodos();},350);}
+
+function renderTodoList() {
+  const content = document.getElementById("mainContent");
+  content.innerHTML = `
+    <h2>To-Do List</h2>
+    <input type='text' id='todoInput' placeholder='Add a new task...' />
+    <button class='primary' onclick='addTodo()'>Add Task</button>
+    <div id='todoList'></div>
+  `;
+  loadTodos();
+}
+
+function renderTodos(){const list=document.getElementById("todoList");if(!list)return;list.innerHTML="";todos.forEach(t=>{const div=document.createElement("div");div.className=`card todo-item fade-in ${t.completed?"completed":""}`;div.dataset.id=t.id;div.innerHTML=`<div class='todo-text'>${t.text}</div><div class='todo-buttons'><button class='primary' style='background:${t.completed?"orange":"limegreen"};padding:6px 8px;' onclick='toggleTodo(${t.id})'><i data-lucide='${t.completed?"rotate-ccw":"check"}'></i></button><button class='primary' style='background:red;padding:6px 8px;' onclick='deleteTodo(${t.id})'><i data-lucide='trash-2'></i></button></div>`;list.appendChild(div);});lucide.createIcons();}
+
+/* --- MEDIASTACK NEWS READER --- */
+function renderMediaStackNews() {
+  const content = document.getElementById("mainContent");
+  content.innerHTML = `
+    <div class="news-header">
+      <h2 class="news-title">Latest News</h2>
+      <button class="refresh-button" id="refreshNews" title="Refresh News">
+        <i data-lucide="refresh-cw"></i>
+      </button>
+    </div>
+    
+    <div class="news-categories">
+      ${Object.entries(NEWS_CATEGORIES).map(([key, category]) => `
+        <button class="news-category-btn ${key === currentCategory ? 'active' : ''}" 
+                data-category="${key}">
+          ${category.name}
+        </button>
+      `).join('')}
+    </div>
+    
+    <div class="news-container" id="newsContainer">
+      <div class="mediastack-loading">
+        <div class="loading">
+          <div class="loading-dot"></div>
+          <div class="loading-dot"></div>
+          <div class="loading-dot"></div>
+        </div>
+        <h4>Loading News</h4>
+        <p>Fetching the latest headlines from around the world...</p>
+      </div>
+    </div>
+  `;
+  
+  lucide.createIcons();
+  
+  // Add event listeners
+  document.getElementById('refreshNews').addEventListener('click', refreshMediaStackNews);
+  document.querySelectorAll('.news-category-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      switchMediaStackCategory(e.target.dataset.category);
+    });
+  });
+  
+  // Load initial news
+  loadMediaStackNews(currentCategory);
+}
+
+async function loadMediaStackNews(category) {
+  const container = document.getElementById('newsContainer');
+  
+  try {
+    // Show loading state
+    container.innerHTML = `
+      <div class="mediastack-loading">
+        <div class="loading">
+          <div class="loading-dot"></div>
+          <div class="loading-dot"></div>
+          <div class="loading-dot"></div>
+        </div>
+        <h4>Loading ${NEWS_CATEGORIES[category].name}</h4>
+        <p>Fetching the latest headlines...</p>
+      </div>
+    `;
+    
+    // Build API URL - requesting 50 articles for a scrollable feed
+    const categoryParam = NEWS_CATEGORIES[category].param;
+    const url = `${MEDIASTACK_BASE_URL}?access_key=${MEDIASTACK_API_KEY}&categories=${categoryParam}&languages=en&limit=50&sort=published_desc`;
+    
+    const response = await fetch(url);
+    
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    
+    const data = await response.json();
+    
+    if (data.error) {
+      throw new Error(data.error.info || 'API error');
+    }
+    
+    if (!data.data || data.data.length === 0) {
+      throw new Error('No news articles found');
+    }
+    
+    displayMediaStackNews(data.data, category);
+    
+  } catch (error) {
+    console.error('Error loading MediaStack news:', error);
+    container.innerHTML = `
+      <div class="mediastack-error">
+        <h4>Unable to Load News</h4>
+        <p>${error.message || 'Please check your internet connection and try again.'}</p>
+        <button class="retry-button" onclick="loadMediaStackNews('${category}')">
+          <i data-lucide="refresh-cw"></i>
+          Try Again
+        </button>
+      </div>
+    `;
+    lucide.createIcons();
+  }
+}
+
+function displayMediaStackNews(newsItems, category) {
+  const container = document.getElementById('newsContainer');
+  
+  if (newsItems.length === 0) {
+    container.innerHTML = `
+      <div class="mediastack-error">
+        <h4>No News Available</h4>
+        <p>No news articles found for this category.</p>
+      </div>
+    `;
+    return;
+  }
+  
+  let newsHTML = `
+    <div class="news-grid">
+  `;
+  
+  newsItems.forEach((article, index) => {
+    const imageUrl = article.image || null;
+    const description = article.description || 'No description available. Click to read more about this story.';
+    const source = article.source || 'Unknown Source';
+    const publishedAt = formatMediaStackDate(article.published_at);
+    const categoryTag = article.category ? article.category.charAt(0).toUpperCase() + article.category.slice(1) : 'General';
+    
+    // Truncate long titles and descriptions for better UI
+    const truncatedTitle = article.title && article.title.length > 100 
+      ? article.title.substring(0, 100) + '...' 
+      : article.title || 'No Title Available';
+      
+    const truncatedDesc = description.length > 120 
+      ? description.substring(0, 120) + '...' 
+      : description;
+    
+    newsHTML += `
+      <div class="mediastack-news-card" style="animation-delay: ${index * 0.05}s">
+        ${imageUrl ? `
+          <img src="${imageUrl}" alt="${truncatedTitle}" class="news-image" 
+               onerror="this.parentNode.querySelector('.news-image-placeholder').style.display='flex'; this.style.display='none'">
+        ` : ''}
+        
+        <div class="news-image news-image-placeholder" style="${imageUrl ? 'display:none' : 'display:flex'}">
+          <i data-lucide="newspaper"></i>
+          <span>${source}</span>
+        </div>
+        
+        <div class="mediastack-news-category">${categoryTag}</div>
+        
+        <div class="mediastack-news-title">${truncatedTitle}</div>
+        
+        <div class="mediastack-news-description">${truncatedDesc}</div>
+        
+        <div class="mediastack-news-meta">
+          <div class="mediastack-news-source">
+            <i data-lucide="building"></i>
+            ${source}
+          </div>
+          <div class="mediastack-news-date">${publishedAt}</div>
+        </div>
+        
+        ${article.url ? `
+          <a href="${article.url}" target="_blank" class="mediastack-news-link" onclick="trackNewsClick('${category}')">
+            Read Full Story
+            <i data-lucide="arrow-up-right"></i>
+          </a>
+        ` : ''}
+      </div>
+    `;
+  });
+  
+  newsHTML += `
+    </div>
+    <div class="news-counter">
+      Showing ${newsItems.length} news articles • Last updated: ${new Date().toLocaleTimeString()}
+    </div>
+  `;
+  
+  container.innerHTML = newsHTML;
+  lucide.createIcons();
+}
+
+function formatMediaStackDate(dateString) {
+  try {
+    const date = new Date(dateString);
+    const now = new Date();
+    const diffTime = Math.abs(now - date);
+    const diffHours = Math.floor(diffTime / (1000 * 60 * 60));
+    
+    if (diffHours < 1) return 'Just now';
+    if (diffHours < 24) return `${diffHours}h ago`;
+    
+    const diffDays = Math.floor(diffHours / 24);
+    if (diffDays < 7) return `${diffDays}d ago`;
+    
+    return date.toLocaleDateString('en-US', { 
+      month: 'short', 
+      day: 'numeric',
+      year: date.getFullYear() !== now.getFullYear() ? 'numeric' : undefined
+    });
+  } catch {
+    return 'Recent';
+  }
+}
+
+function switchMediaStackCategory(category) {
+  // Update active button
+  document.querySelectorAll('.news-category-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.category === category);
+  });
+  
+  currentCategory = category;
+  
+  // Load news for category
+  if (newsData[category]) {
+    displayMediaStackNews(newsData[category], category);
+  } else {
+    loadMediaStackNews(category);
+  }
+}
+
+function refreshMediaStackNews() {
+  const refreshBtn = document.getElementById('refreshNews');
+  refreshBtn.classList.add('loading');
+  
+  // Clear cached data for this category
+  delete newsData[currentCategory];
+  
+  loadMediaStackNews(currentCategory);
+  
+  // Remove loading state after a delay
+  setTimeout(() => {
+    refreshBtn.classList.remove('loading');
+  }, 1000);
+}
+
+function trackNewsClick(category) {
+  // You can add analytics here
+  console.log(`News clicked from category: ${category}`);
+}
+
+/* ======================= AI CHAT IMPLEMENTATION ======================= */
+let chatHistory = [];
+let currentChatId = null;
+let isTyping = false;
+
+// Initialize chat from localStorage
+function loadChatHistory() {
+  const saved = localStorage.getItem("chatHistory");
+  chatHistory = saved ? JSON.parse(saved) : [];
+}
+
+function saveChatHistory() {
+  localStorage.setItem("chatHistory", JSON.stringify(chatHistory));
+}
+
+function renderAIChat() {
+  const content = document.getElementById("mainContent");
+  
+  content.innerHTML = `
+    <h2>AI Chat Assistant</h2>
+    
+    <div class="ai-model-selector">
+      <label for="aiModel">Choose AI Model:</label>
+      <select id="aiModel" class="model-select">
+        <option value="gemini">Google Gemini</option>
+        <option value="chatgpt">ChatGPT</option>
+      </select>
+    </div>
+    
+    <div class="api-key-container">
+      <div class="api-key-status" id="apiKeyStatus">
+        <i data-lucide="info"></i>
+        <span>Using demo mode. For full functionality, add your API keys.</span>
+      </div>
+      <details style="margin-top: 10px;">
+        <summary style="cursor: pointer; font-size: 0.9rem; color: var(--accent);">Add API Keys (Optional)</summary>
+        <div style="margin-top: 10px;">
+          <div style="margin-bottom: 8px;">
+            <label style="font-size: 0.8rem; display: block; margin-bottom: 4px;">Gemini API Key:</label>
+            <input type="password" id="geminiApiKey" placeholder="Enter Gemini API key..." style="font-size: 0.8rem; padding: 8px;" />
+          </div>
+          <div style="margin-bottom: 8px;">
+            <label style="font-size: 0.8rem; display: block; margin-bottom: 4px;">OpenAI API Key:</label>
+            <input type="password" id="openaiApiKey" placeholder="Enter OpenAI API key..." style="font-size: 0.8rem; padding: 8px;" />
+          </div>
+          <button class="primary" onclick="saveApiKeys()" style="font-size: 0.8rem; padding: 6px 12px;">Save API Keys</button>
+        </div>
+      </details>
+    </div>
+    
+    <div class="chat-container">
+      <div class="chat-header">
+        <i data-lucide="bot"></i>
+        <h3 id="chatModelTitle">Alpha AI Assistant (Demo Mode)</h3>
+        <div class="chat-status">
+          <div class="status-indicator"></div>
+          <span>Online</span>
+        </div>
+      </div>
+      
+      <div class="chat-messages" id="chatMessages">
+        <div class="message ai-message">
+          Hi! I'm your AI study assistant in demo mode. I can simulate responses to common study questions. For full AI capabilities, please add your API keys above.
+        </div>
+      </div>
+      
+      <div class="chat-suggestions" id="chatSuggestions">
+        <div class="suggestion-chip" onclick="sendSuggestion('Explain data structures')">Explain data structures</div>
+        <div class="suggestion-chip" onclick="sendSuggestion('Help with calculus homework')">Help with calculus</div>
+        <div class="suggestion-chip" onclick="sendSuggestion('What is machine learning?')">What is ML?</div>
+        <div class="suggestion-chip" onclick="sendSuggestion('Give me study tips')">Study tips</div>
+      </div>
+      
+      <div class="chat-input-container">
+        <textarea class="chat-input" id="chatInput" placeholder="Type your message..." rows="1"></textarea>
+        <button class="send-button" id="sendButton" onclick="sendMessage()">
+          <i data-lucide="send"></i>
+        </button>
+      </div>
+      
+      <div class="chat-actions">
+        <button class="clear-chat-button" onclick="clearChat()">
+          <i data-lucide="trash-2"></i>
+          Clear Chat
+        </button>
+      </div>
+    </div>
+  `;
+  
+  lucide.createIcons();
+  
+  // Load saved API keys
+  loadApiKeys();
+  
+  // Add model change listener
+  document.getElementById('aiModel').addEventListener('change', function() {
+    updateModelTitle(this.value);
+  });
+  
+  // Initialize chat
+  loadChatHistory();
+  setupChatInput();
+}
+
+function loadApiKeys() {
+  const geminiKey = localStorage.getItem('geminiApiKey');
+  const openaiKey = localStorage.getItem('openaiApiKey');
+  
+  if (geminiKey) {
+    document.getElementById('geminiApiKey').value = geminiKey;
+  }
+  if (openaiKey) {
+    document.getElementById('openaiApiKey').value = openaiKey;
+  }
+  
+  updateApiKeyStatus();
+}
+
+function saveApiKeys() {
+  const geminiKey = document.getElementById('geminiApiKey').value.trim();
+  const openaiKey = document.getElementById('openaiApiKey').value.trim();
+  
+  if (geminiKey) {
+    localStorage.setItem('geminiApiKey', geminiKey);
+  }
+  if (openaiKey) {
+    localStorage.setItem('openaiApiKey', openaiKey);
+  }
+  
+  updateApiKeyStatus();
+  showToast('API keys saved successfully!');
+}
+
+function updateApiKeyStatus() {
+  const statusElement = document.getElementById('apiKeyStatus');
+  const geminiKey = localStorage.getItem('geminiApiKey');
+  const openaiKey = localStorage.getItem('openaiApiKey');
+  
+  if (geminiKey || openaiKey) {
+    statusElement.innerHTML = '<i data-lucide="check-circle"></i><span>API keys configured! Full AI functionality enabled.</span>';
+    statusElement.className = 'api-key-status valid';
+  } else {
+    statusElement.innerHTML = '<i data-lucide="info"></i><span>Using demo mode. Add API keys for full functionality.</span>';
+    statusElement.className = 'api-key-status';
+  }
+  lucide.createIcons();
+}
+
+function updateModelTitle(model) {
+  const titleElement = document.getElementById('chatModelTitle');
+  const hasApiKeys = localStorage.getItem('geminiApiKey') || localStorage.getItem('openaiApiKey');
+  
+  if (!hasApiKeys) {
+    titleElement.textContent = 'Alpha AI Assistant (Demo Mode)';
+    return;
+  }
+  
+  if (model === 'gemini') {
+    titleElement.textContent = 'Alpha AI Assistant (Gemini)';
+  } else {
+    titleElement.textContent = 'Alpha AI Assistant (ChatGPT)';
+  }
+}
+
+// Demo responses for when no API keys are available
+const DEMO_RESPONSES = {
+  'explain data structures': "Data structures are ways to organize and store data in a computer so it can be used efficiently. Common types include arrays, linked lists, stacks, queues, trees, and graphs. Arrays store elements in contiguous memory, while linked lists use pointers. Trees are hierarchical, and graphs show relationships between nodes.",
+  'help with calculus homework': "For calculus, remember the fundamental concepts: derivatives measure rate of change, and integrals measure accumulation. For derivatives, use power rule: d/dx(x^n) = n*x^(n-1). For integrals, don't forget the +C constant. Practice with problems involving limits, derivatives, and basic integration techniques.",
+  'what is machine learning': "Machine learning is a subset of AI where computers learn from data without explicit programming. There are three main types: supervised learning (labeled data), unsupervised learning (unlabeled data), and reinforcement learning (reward-based). Common algorithms include linear regression, decision trees, and neural networks.",
+  'give me study tips': "Effective study tips: 1) Use spaced repetition, 2) Practice active recall, 3) Break study sessions into 25-30 minute chunks, 4) Teach concepts to others, 5) Create mind maps, 6) Get enough sleep, 7) Stay hydrated, 8) Use the Pomodoro technique (25 min study, 5 min break).",
+  'default': "I'd be happy to help with that! In demo mode, I can provide general information about common study topics. For detailed, personalized assistance with your specific question, please add your API keys to enable full AI functionality."
+};
+
+async function callGeminiAPI(message) {
+  const apiKey = localStorage.getItem('geminiApiKey') || GEMINI_API_KEY;
+  
+  if (!apiKey || apiKey === "YOUR_GEMINI_API_KEY") {
+    throw new Error('Gemini API key not configured');
+  }
+
+  try {
+    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${apiKey}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        contents: [{
+          parts: [{
+            text: `You are a helpful and friendly study assistant for college students. Be educational, concise, and supportive. Respond to: ${message}`
+          }]
+        }],
+        generationConfig: {
+          temperature: 0.7,
+          maxOutputTokens: 500,
+        }
+      })
+    });
+    
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.error?.message || `API error: ${response.status}`);
+    }
+    
+    const data = await response.json();
+    return data.candidates?.[0]?.content?.parts?.[0]?.text || 
+           "I apologize, but I couldn't generate a proper response. Please try again.";
+           
+  } catch (error) {
+    console.error("Gemini API error:", error);
+    throw error;
+  }
+}
+
+async function callChatGPT(message) {
+  const apiKey = localStorage.getItem('openaiApiKey') || OPENAI_API_KEY;
+  
+  if (!apiKey || apiKey === "YOUR_OPENAI_API_KEY") {
+    throw new Error('OpenAI API key not configured');
+  }
+
+  try {
+    const response = await fetch('https://api.openai.com/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${apiKey}`
+      },
+      body: JSON.stringify({
+        model: 'gpt-3.5-turbo',
+        messages: [
+          {
+            role: 'system',
+            content: 'You are a helpful, friendly study assistant for college students. Provide educational, concise, and supportive responses.'
+          },
+          {
+            role: 'user',
+            content: message
+          }
+        ],
+        max_tokens: 500,
+        temperature: 0.7
+      })
+    });
+    
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.error?.message || `OpenAI API error: ${response.status}`);
+    }
+    
+    const data = await response.json();
+    return data.choices[0].message.content;
+    
+  } catch (error) {
+    console.error("OpenAI API error:", error);
+    throw error;
+  }
+}
+
+function getDemoResponse(message) {
+  const lowerMessage = message.toLowerCase();
+  
+  for (const [key, response] of Object.entries(DEMO_RESPONSES)) {
+    if (lowerMessage.includes(key) && key !== 'default') {
+      return response;
+    }
+  }
+  
+  return DEMO_RESPONSES.default;
+}
+
+function setupChatInput() {
+  const chatInput = document.getElementById("chatInput");
+  const sendButton = document.getElementById("sendButton");
+  
+  chatInput.addEventListener("input", function() {
+    this.style.height = "auto";
+    this.style.height = (this.scrollHeight) + "px";
+    sendButton.disabled = this.value.trim() === "";
+  });
+  
+  chatInput.addEventListener("keydown", function(e) {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      sendMessage();
+    }
+  });
+}
+
+function sendSuggestion(text) {
+  document.getElementById("chatInput").value = text;
+  sendMessage();
+}
+
+async function sendMessage() {
+  const chatInput = document.getElementById("chatInput");
+  const message = chatInput.value.trim();
+  const aiModel = document.getElementById("aiModel").value;
+  
+  if (!message || isTyping) return;
+  
+  chatInput.value = "";
+  chatInput.style.height = "auto";
+  document.getElementById("sendButton").disabled = true;
+  
+  addMessageToChat(message, "user");
+  showTypingIndicator();
+  
+  try {
+    let aiResponse;
+    const hasValidApiKeys = localStorage.getItem('geminiApiKey') || localStorage.getItem('openaiApiKey');
+    
+    if (!hasValidApiKeys) {
+      // Use demo mode
+      await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate API delay
+      aiResponse = getDemoResponse(message);
+    } else {
+      // Use actual API
+      if (aiModel === "gemini") {
+        aiResponse = await callGeminiAPI(message);
+      } else {
+        aiResponse = await callChatGPT(message);
+      }
+    }
+    
+    hideTypingIndicator();
+    addMessageToChat(aiResponse, "ai");
+    saveCurrentChat();
+    
+  } catch (error) {
+    console.error("AI API error:", error);
+    hideTypingIndicator();
+    
+    let errorMessage = "I'm currently in demo mode. ";
+    
+    if (error.message.includes('API key') || error.message.includes('401') || error.message.includes('403')) {
+      errorMessage += "API key error. Please check if your API key is valid and has sufficient credits.";
+    } else if (error.message.includes('quota') || error.message.includes('429')) {
+      errorMessage += "API quota exceeded. Please check your usage limits or try again later.";
+    } else if (error.message.includes('network') || error.message.includes('fetch')) {
+      errorMessage += "Network error. Please check your internet connection.";
+    } else {
+      errorMessage += "To enable full AI functionality, please add valid API keys in the settings above.";
+    }
+    
+    addMessageToChat(errorMessage, "ai");
+  }
+}
+
+function addMessageToChat(message, sender) {
+  const chatMessages = document.getElementById("chatMessages");
+  
+  const messageDiv = document.createElement("div");
+  messageDiv.className = `message ${sender}-message`;
+  messageDiv.textContent = message;
+  
+  chatMessages.appendChild(messageDiv);
+  chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+
+function showTypingIndicator() {
+  isTyping = true;
+  const chatMessages = document.getElementById("chatMessages");
+  
+  const typingDiv = document.createElement("div");
+  typingDiv.className = "typing-indicator";
+  typingDiv.id = "typingIndicator";
+  typingDiv.innerHTML = `
+    <span>AI is typing</span>
+    <div class="typing-dots">
+      <div class="typing-dot"></div>
+      <div class="typing-dot"></div>
+      <div class="typing-dot"></div>
+    </div>
+  `;
+  
+  chatMessages.appendChild(typingDiv);
+  chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+
+function hideTypingIndicator() {
+  isTyping = false;
+  const typingIndicator = document.getElementById("typingIndicator");
+  if (typingIndicator) {
+    typingIndicator.remove();
+  }
+}
+
+function clearChat() {
+  const chatMessages = document.getElementById("chatMessages");
+  const hasApiKeys = localStorage.getItem('geminiApiKey') || localStorage.getItem('openaiApiKey');
+  
+  if (hasApiKeys) {
+    chatMessages.innerHTML = '<div class="message ai-message">Hi! I\'m your AI study assistant. How can I help you today?</div>';
+  } else {
+    chatMessages.innerHTML = '<div class="message ai-message">Hi! I\'m your AI study assistant in demo mode. Add API keys for full functionality.</div>';
+  }
+  
+  currentChatId = null;
+  chatMessages.scrollTop = 0;
+}
+
+function saveCurrentChat() {
+  saveChatHistory();
+}
+
+function showToast(message) {
+  // Create toast element
+  const toast = document.createElement('div');
+  toast.style.cssText = `
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: var(--accent);
+    color: white;
+    padding: 12px 16px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    z-index: 1000;
+    animation: slideInRight 0.3s ease;
+  `;
+  toast.textContent = message;
+  
+  document.body.appendChild(toast);
+  
+  setTimeout(() => {
+    toast.remove();
+  }, 3000);
+}
+
+// Initialize the app when the page loads
+document.addEventListener('DOMContentLoaded', function() {
+  // Show login page by default
+  document.getElementById('loginPage').style.display = 'flex';
+});
+
+</script>
+<!-- Floating Embers -->
+<div id="floatingEmbers"></div>
+
+<script>
+// Add floating embers animation
+function createEmbers() {
+  const container = document.getElementById('floatingEmbers');
+  if (!container) return;
+  
+  for (let i = 0; i < 15; i++) {
+    const ember = document.createElement('div');
+    ember.className = 'ember';
+    ember.style.left = Math.random() * 100 + 'vw';
+    ember.style.animationDelay = Math.random() * 5 + 's';
+    ember.style.opacity = Math.random() * 0.7 + 0.3;
+    container.appendChild(ember);
+  }
+}
+
+// Call when page loads
+document.addEventListener('DOMContentLoaded', createEmbers);
+</script>
+</body>
+</html>
